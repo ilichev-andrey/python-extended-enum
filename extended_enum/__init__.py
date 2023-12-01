@@ -47,12 +47,15 @@ class ExtendedEnum(enum.Enum):
         1. An enumeration containing the values of all members of the extended type.
 
         ```python
+        from enum import unique
         from extended_enum import ExtendedEnum, BaseExtendedEnumValue, ValueWithDescription
 
         class DetailedEnum(ExtendedEnum):
             CONST1 = BaseExtendedEnumValue(value='const1')
             CONST2 = ValueWithDescription(value='const2', description='some description 2')
             CONST3 = ValueWithDescription(value='const3', description='some description 3')
+
+        unique(DetailedEnum)
         ```
 
         2. A combined enumeration in which member values are of different types.
