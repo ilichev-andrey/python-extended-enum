@@ -24,7 +24,9 @@ jobs:
           python-version: '3.10'
           cache: poetry
       - name: Configure Poetry
-        run: poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
+        run: poetry config pypi-token.pypi
+        with:
+          args: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
       - name: Build distributions
         run: poetry build
       - name: Publish package
