@@ -112,7 +112,7 @@ class ExtendedEnum(enum.Enum):
     """
 
     value: SimpleValueType
-    _value_: ExtendedEnumValueType
+    _value_: ExtendedEnumValueType  # noqa: WPS120
 
     def __init__(self, value: Union[SimpleValueType, ExtendedEnumValueType]) -> None:
         """
@@ -127,7 +127,7 @@ class ExtendedEnum(enum.Enum):
             value = BaseExtendedEnumValue(value)
 
         super().__init__()
-        self._value_ = value
+        self._value_ = value  # noqa: WPS120
 
     @classmethod
     def get_values(cls) -> Tuple[SimpleValueType, ...]:
@@ -146,12 +146,12 @@ class ExtendedEnum(enum.Enum):
 
     @DynamicClassAttribute
     def value(self) -> SimpleValueType:
-        """The value of the enumeration member."""
+        """Get the value of the enumeration member."""
         return self._value_.value
 
     @DynamicClassAttribute
     def extended_value(self) -> ExtendedEnumValueType:
-        """The extended value of the enumeration member."""
+        """Get the expanded value of an enumeration member."""
         return self._value_
 
     @classmethod

@@ -25,6 +25,8 @@ wemake-python-styleguide = "^0.18.0"
 flake8-class-attributes-order = "^0.1.3"
 flake8-pytest = "^1.4"
 flake8-pytest-style = "^1.7.2"
+flake8-pyproject = "^1.2.3"
+flake8-import-order = "^0.18.2"
 
 [tool.poetry.group.testing]
 optional = true
@@ -43,6 +45,52 @@ twine = "^4.0.2"
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
+
+[tool.flake8]
+# Base flake8 configuration:
+# https://flake8.pycqa.org/en/latest/user/configuration.html
+show_source = true
+statistics = false
+doctests = true
+max-line-length = 120
+accept_encodings = "utf-8"
+ignore = [
+    # flake8-isort:
+    "I",
+    # flake8-rst-docstrings:
+    "RST",
+    # flake8-docstrings:
+    "D104",
+    # wemake-python-styleguide:
+    "WPS110", "WPS237", "WPS305", "WPS306", "WPS412"
+]
+
+# Excluding some files and directories:
+exclude = ["__pycache__"]
+
+# darglint configuration:
+# https://github.com/terrencepreilly/darglint
+strictness = "long"
+docstring_style = "google"
+
+# Plugin: flake8-import-order
+import-order-style = "pep8"
+application-import-names = ["extended_enum"]
+
+# Plugin: flake8-class-attributes-order
+class_attributes_order = [
+    "field",
+    "meta_class",
+    "nested_class",
+    "magic_method",
+    "property_method",
+    "static_method",
+    "class_method",
+    "method",
+    "private_static_method",
+    "private_class_method",
+    "private_method",
+]
 
 [tool.coverage.report]
 # https://coverage.readthedocs.io/en/latest/config.html
