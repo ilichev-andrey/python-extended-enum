@@ -1,0 +1,56 @@
+# Example: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+    tags: [ "*" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  lint:
+    name: Linter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Poetry
+        run: pipx install poetry
+      - name: Setup Python
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: poetry
+      - name: Install dependencies
+        run: |
+          poetry export --without-hashes --with-credentials --only="linting" --format=requirements.txt > requirements.txt
+          pip install --no-cache -r requirements.txt
+      - name: wemake-python-styleguide
+        run: bash ./scripts/run_wemake-python-styleguide.sh ./extended_enum
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+
+  test:
+    strategy:
+      matrix:
+        python: ["3.8", "3.9", "3.10"]
+      fail-fast: false
+    
+    name: "Test on Python ${{ matrix.python }}"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "${{ matrix.python }}"
+          cache: poetry
+      - name: Install dependencies
+        run: poetry install --only="main,testing"
+      - name: Execute tests
+        run: poetry run pytest --junitxml=pytest.xml --cov-report=term-missing --cov-report=xml:pytest_coverage.xml --cov-config=pyproject.toml ./tests
+    
