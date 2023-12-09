@@ -28,9 +28,10 @@ jobs:
         run: |
           poetry install --only="linting"
       - name: wemake-python-styleguide
+        # https://github.com/wemake-services/wemake-python-styleguide/blob/0.18.0/scripts/entrypoint.sh
         uses: wemake-services/wemake-python-styleguide@0.18.0
         with:
-          reporter: 'github-pr-review'
+          reporter: 'terminal'
           path: './extended_enum'
         env:
           GITHUB_TOKEN: ${{ secrets.github_token }}
