@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "extended-enum"
-version = "1.0.0"
+version = "1.0.1"
 description = "Extends the capabilities of the standard Enum."
 authors = ["Ilichev Andrey <ilichev.andrey.y@gmail.com>"]
 license = "Apache-2.0"
