@@ -26,8 +26,8 @@ jobs:
           cache: poetry
       - name: Install dependencies
         run: |
-          poetry config virtualenvs.create false
-          poetry install --only="linting"
+          poetry export --without-hashes --with-credentials --only="linting" --format=requirements.txt > requirements.txt
+          pip install --no-cache -r requirements.txt
       - name: wemake-python-styleguide
         run: |
           bash ./scripts/run_wemake-python-styleguide.sh ./extended_enum
