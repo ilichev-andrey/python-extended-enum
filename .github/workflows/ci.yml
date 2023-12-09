@@ -1,5 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+# Example: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
 name: CI/CD
 
@@ -29,8 +28,7 @@ jobs:
           poetry export --without-hashes --with-credentials --only="linting" --format=requirements.txt > requirements.txt
           pip install --no-cache -r requirements.txt
       - name: wemake-python-styleguide
-        run: |
-          bash ./scripts/run_wemake-python-styleguide.sh ./extended_enum
+        run: bash ./scripts/run_wemake-python-styleguide.sh ./extended_enum
         env:
           GITHUB_TOKEN: ${{ secrets.github_token }}
 
@@ -52,8 +50,7 @@ jobs:
           python-version: "${{ matrix.python }}"
           cache: poetry
       - name: Install dependencies
-        run: |
-          poetry install --only="main,testing"
+        run: poetry install --only="main,testing"
       - name: Execute tests
         run: poetry run pytest --junitxml=pytest.xml --cov-report=term-missing --cov-report=xml:pytest_coverage.xml --cov-config=pyproject.toml ./tests
     
