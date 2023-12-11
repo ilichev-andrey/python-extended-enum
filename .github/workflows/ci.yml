@@ -1,11 +1,8 @@
 # Example: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: CI/CD
+name: CI Pull Request
 
 on:
-  push:
-    branches: [ "master" ]
-    tags: [ "*" ]
   pull_request:
     branches: [ "master" ]
 
