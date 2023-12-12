@@ -13,6 +13,7 @@ jobs:
   deploy:
     name: Build and publish Python distributions to PyPI
     runs-on: ubuntu-latest
+    environment: publish_package
     steps:
       - uses: actions/checkout@v3
       - name: Install Poetry
