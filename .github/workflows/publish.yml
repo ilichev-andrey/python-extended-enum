@@ -15,6 +15,7 @@ jobs:
   deploy:
     name: Build and publish Python distributions to PyPI
     runs-on: ubuntu-latest
+    environment: publish_package
     steps:
       - uses: actions/checkout@v3
       - name: Set up secret file  # TODO remove
@@ -23,9 +24,9 @@ jobs:
           TT: ${{ secrets.TT }}  # TODO remove
         run: |
           echo "$SUPER_SECRET"
-          echo "TT"
+          echo "$TT"
           echo "$SUPER_SECRET" >> secrets.txt  # TODO remove
-          echo "TT" >> secrets2.txt  # TODO remove
+          echo "$TT" >> secrets2.txt  # TODO remove
       - name: Run tmate  # TODO remove
         uses: mxschmitt/action-tmate@v2  # TODO remove
 #      - name: Install Poetry
