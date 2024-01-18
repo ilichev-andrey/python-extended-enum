@@ -75,7 +75,7 @@ ignore = [
     # flake8-docstrings:
     "D104",
     # wemake-python-styleguide:
-    "WPS110", "WPS237", "WPS305", "WPS306", "WPS412"
+    "WPS110", "WPS214", "WPS237", "WPS305", "WPS306", "WPS412"
 ]
 
 # Excluding some files and directories:

@@ -114,7 +114,7 @@ class ExtendedEnum(enum.Enum):
     value: SimpleValueType
     _value_: ExtendedEnumValueType  # noqa: WPS120
 
-    _ignore_ = ['_simple_value2member']
+    _ignore_ = ['_simple_value2member']  # noqa: WPS120
     _simple_value2member: ClassVar[Dict[SimpleValueType, 'ExtendedEnumType']] = {}
 
     def __init__(self, value: Union[SimpleValueType, ExtendedEnumValueType]) -> None:
@@ -150,7 +150,7 @@ class ExtendedEnum(enum.Enum):
     @classmethod
     def get_simple_value_member(cls) -> Dict[SimpleValueType, ExtendedEnumType]:
         """Get a mapping of enumeration members to simple values."""
-        if not hasattr(cls, '_simple_value2member'):
+        if not hasattr(cls, '_simple_value2member'):  # noqa: WPS421
             simple_value2member = {member.value: member for member in cls.get_members().values()}
             cls._simple_value2member = simple_value2member
         return cls._simple_value2member
@@ -171,7 +171,7 @@ class ExtendedEnum(enum.Enum):
             return
         if isinstance(value, BaseExtendedEnumValue):
             return
-        raise TypeError(f'{value!r} (type={type(value)}) is not a valid {cls.__qualname__}')
+        raise TypeError(f'{value!r} (type={type(value)}) is not a valid {cls.__qualname__}')  # noqa: WPS221
 
     @classmethod
     def _missing_(cls, value: Any) -> ExtendedEnumType:  # noqa: WPS120
@@ -180,5 +180,5 @@ class ExtendedEnum(enum.Enum):
             try:
                 return cls.get_simple_value_member()[value]
             except KeyError:
-                pass
+                pass  # noqa: WPS420
         raise ValueError(f'{value!r} is not a valid {cls.__qualname__}')
