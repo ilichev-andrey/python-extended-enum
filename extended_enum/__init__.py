@@ -1,7 +1,7 @@
 import enum
 from dataclasses import dataclass, field
 from types import DynamicClassAttribute
-from typing import Union, Optional, TypeVar, Any, cast, Tuple, Dict
+from typing import Union, Optional, TypeVar, Any, cast, Tuple, Dict, ClassVar
 from uuid import UUID
 
 SimpleValueType = Union[UUID, int, str]
@@ -114,6 +114,9 @@ class ExtendedEnum(enum.Enum):
     value: SimpleValueType
     _value_: ExtendedEnumValueType  # noqa: WPS120
 
+    _ignore_ = ['_simple_value2member']
+    _simple_value2member: ClassVar[Dict[SimpleValueType, 'ExtendedEnumType']] = {}
+
     def __init__(self, value: Union[SimpleValueType, ExtendedEnumValueType]) -> None:
         """
         Initialize an enumeration object.
@@ -144,6 +147,14 @@ class ExtendedEnum(enum.Enum):
         """Get the members of the enumeration."""
         return cast(dict, cls.__members__)
 
+    @classmethod
+    def get_simple_value_member(cls) -> Dict[SimpleValueType, ExtendedEnumType]:
+        """Get a mapping of enumeration members to simple values."""
+        if not hasattr(cls, '_simple_value2member'):
+            simple_value2member = {member.value: member for member in cls.get_members().values()}
+            cls._simple_value2member = simple_value2member
+        return cls._simple_value2member
+
     @DynamicClassAttribute
     def value(self) -> SimpleValueType:
         """Get the value of the enumeration member."""
@@ -160,4 +171,14 @@ class ExtendedEnum(enum.Enum):
             return
         if isinstance(value, BaseExtendedEnumValue):
             return
-        raise TypeError(f'Not supported type={type(value)} ({value=})')
+        raise TypeError(f'{value!r} (type={type(value)}) is not a valid {cls.__qualname__}')
+
+    @classmethod
+    def _missing_(cls, value: Any) -> ExtendedEnumType:  # noqa: WPS120
+        cls._check_type(value)
+        if isinstance(value, (UUID, int, str)):
+            try:
+                return cls.get_simple_value_member()[value]
+            except KeyError:
+                pass
+        raise ValueError(f'{value!r} is not a valid {cls.__qualname__}')

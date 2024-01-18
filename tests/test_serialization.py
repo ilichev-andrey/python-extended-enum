@@ -22,6 +22,16 @@ class MixedEnum(ExtendedEnum):
     CONST8 = ValueWithDescription(value=3, description='some const8 description')
 
 
+class DetailedEnum(ExtendedEnum):
+    """An enumeration containing the values of all members of the extended type."""
+
+    CONST1 = BaseExtendedEnumValue(value='const1')
+    DUPLICATE_CONST1 = BaseExtendedEnumValue(value='const1')
+    DUPLICATE_CONST2 = ValueWithDescription(value='const1')
+    DUPLICATE_CONST3 = ValueWithDescription(value='const1', description='some description')
+    DUPLICATE_CONST4 = 'const1'
+
+
 @pytest.mark.parametrize(
     'enum_cls,value,expected_enum_member',
     [
@@ -35,6 +45,16 @@ class MixedEnum(ExtendedEnum):
         (MixedEnum, ValueWithDescription(value='const7'), MixedEnum.CONST7),
         (MixedEnum, ValueWithDescription(value=3, description='some const8 description'), MixedEnum.CONST8),
         (MixedEnum, ValueWithDescription(value=3), MixedEnum.CONST8),
+        (MixedEnum, 'const4', MixedEnum.CONST4),
+        (MixedEnum, 3, MixedEnum.CONST8),
+        (DetailedEnum, 'const1', DetailedEnum.CONST1),
+        (DetailedEnum, BaseExtendedEnumValue(value='const1'), DetailedEnum.CONST1),
+        (DetailedEnum, ValueWithDescription(value='const1'), DetailedEnum.DUPLICATE_CONST2),
+        (
+            DetailedEnum,
+            ValueWithDescription(value='const1', description='some description'),
+            DetailedEnum.DUPLICATE_CONST2
+        ),
     ]
 )
 def test_successful_loads(enum_cls: Type[ExtendedEnum], value: Any, expected_enum_member: ExtendedEnum):
@@ -63,7 +83,7 @@ def test_successful_loads(enum_cls: Type[ExtendedEnum], value: Any, expected_enu
         {
             'enum_cls': MixedEnum,
             'value': None,
-            'context': pytest.raises(ValueError, match="None is not a valid MixedEnum")
+            'context': pytest.raises(TypeError, match=r"None \(type=<class 'NoneType'>\) is not a valid MixedEnum")
         }.values(),
         {
             'enum_cls': MixedEnum,

@@ -1,8 +1,9 @@
 [tool.poetry]
 name = "extended-enum"
-version = "1.0.1"
+version = "1.0.2"
 description = "Extends the capabilities of the standard Enum."
 authors = ["Ilichev Andrey <ilichev.andrey.y@gmail.com>"]
+homepage = "https://github.com/ilichev-andrey/python-extended-enum"
 license = "Apache-2.0"
 readme = "README.md"
 keywords = ["enum", "extended", "extended-enum"]
@@ -21,10 +22,10 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
 ]
 
-[project.urls]
-Homepage = "https://github.com/ilichev-andrey/extended-enum"
-Documentation = "https://github.com/ilichev-andrey/extended-enum"
-Repository = "https://github.com/ilichev-andrey/extended-enum"
+[tool.poetry.urls]
+"Repository" = "https://github.com/ilichev-andrey/python-extended-enum"
+"Documentation" = "https://github.com/ilichev-andrey/python-extended-enum"
+"Tracker" = "https://github.com/ilichev-andrey/python-extended-enum/issues"
 
 [tool.poetry.dependencies]
 python = ">=3.8.1, <3.11"
