@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "extended-enum"
-version = "1.0.2"
+version = "1.0.3"
 description = "Extends the capabilities of the standard Enum."
 authors = ["Ilichev Andrey <ilichev.andrey.y@gmail.com>"]
 homepage = "https://github.com/ilichev-andrey/python-extended-enum"
