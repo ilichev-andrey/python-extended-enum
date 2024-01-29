@@ -23,7 +23,7 @@ from dataclasses import dataclass, field
 from enum import unique
 from typing import Optional
 from uuid import UUID
-from extended_enum import ExtendedEnum, ValueWithDescription, BaseExtendedEnumValue
+from extended_enum import ExtendedEnum, ValueWithDescription, BaseExtendedEnumValue, EnumField
 
 
 @dataclass(frozen=True)
@@ -34,16 +34,16 @@ class SomeExtendedEnumValue(BaseExtendedEnumValue):
 
 class MixedEnum(ExtendedEnum):
     """A combined enumeration in which member values are of different types."""
-    CONST1 = 'const1'
-    CONST2 = 1
-    CONST3 = UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83')
-    NOT_DUPLICATE_CONST3 = '79ff3431-3e98-4bec-9a4c-63ede2580f83'
-    CONST4 = BaseExtendedEnumValue(value='const4')
-    CONST5 = BaseExtendedEnumValue(value=2)
-    CONST6 = BaseExtendedEnumValue(value=UUID('e7b4b8ae-2224-47ec-afce-40aeb10b85e2'))
-    CONST7 = ValueWithDescription(value='const7')
-    CONST8 = ValueWithDescription(value=3, description='some const8 description')
-    CONST9 = SomeExtendedEnumValue(value='const9', display_name='some display name', description='some const9 description')
+    CONST1 = EnumField('const1')
+    CONST2 = EnumField(1)
+    CONST3 = EnumField(UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'))
+    NOT_DUPLICATE_CONST3 = EnumField('79ff3431-3e98-4bec-9a4c-63ede2580f83')
+    CONST4 = EnumField(BaseExtendedEnumValue(value='const4'))
+    CONST5 = EnumField(BaseExtendedEnumValue(value=2))
+    CONST6 = EnumField(BaseExtendedEnumValue(value=UUID('e7b4b8ae-2224-47ec-afce-40aeb10b85e2')))
+    CONST7 = EnumField(ValueWithDescription(value='const7'))
+    CONST8 = EnumField(ValueWithDescription(value=3, description='some const8 description'))
+    CONST9 = EnumField(SomeExtendedEnumValue(value='const9', display_name='some display name', description='some const9 description'))
 
 unique(MixedEnum)
 ```

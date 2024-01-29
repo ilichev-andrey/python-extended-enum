@@ -19,6 +19,8 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: Apache Software License",
 ]
 
@@ -28,7 +30,7 @@ classifiers = [
 "Tracker" = "https://github.com/ilichev-andrey/python-extended-enum/issues"
 
 [tool.poetry.dependencies]
-python = ">=3.8.1, <3.11"
+python = "^3.8.1"
 
 [tool.poetry.group.linting]
 optional = true
