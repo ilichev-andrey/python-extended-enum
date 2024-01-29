@@ -51,9 +51,9 @@ class ExtendedEnum(enum.Enum):
         from extended_enum import ExtendedEnum, BaseExtendedEnumValue, ValueWithDescription
 
         class DetailedEnum(ExtendedEnum):
-            CONST1 = BaseExtendedEnumValue(value='const1')
-            CONST2 = ValueWithDescription(value='const2', description='some description 2')
-            CONST3 = ValueWithDescription(value='const3', description='some description 3')
+            CONST1 = EnumField(BaseExtendedEnumValue(value='const1'))
+            CONST2 = EnumField(ValueWithDescription(value='const2', description='some description 2'))
+            CONST3 = EnumField(ValueWithDescription(value='const3', description='some description 3'))
 
         unique(DetailedEnum)
         ```
@@ -65,15 +65,15 @@ class ExtendedEnum(enum.Enum):
         from extended_enum import ExtendedEnum, BaseExtendedEnumValue, ValueWithDescription
 
         class MixedEnum(ExtendedEnum):
-            CONST1 = 'const1'
-            CONST2 = 1
-            CONST3 = UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83')
-            NOT_DUPLICATE_CONST3 = '79ff3431-3e98-4bec-9a4c-63ede2580f83'
-            CONST4 = BaseExtendedEnumValue(value='const4')
-            CONST5 = BaseExtendedEnumValue(value=2)
-            CONST6 = BaseExtendedEnumValue(value=UUID('e7b4b8ae-2224-47ec-afce-40aeb10b85e2'))
-            CONST7 = ValueWithDescription(value='const7')
-            CONST8 = ValueWithDescription(value=3, description='some const8 description')
+            CONST1 = EnumField('const1')
+            CONST2 = EnumField(1)
+            CONST3 = EnumField(UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'))
+            NOT_DUPLICATE_CONST3 = EnumField('79ff3431-3e98-4bec-9a4c-63ede2580f83')
+            CONST4 = EnumField(BaseExtendedEnumValue(value='const4'))
+            CONST5 = EnumField(BaseExtendedEnumValue(value=2))
+            CONST6 = EnumField(BaseExtendedEnumValue(value=UUID('e7b4b8ae-2224-47ec-afce-40aeb10b85e2')))
+            CONST7 = EnumField(ValueWithDescription(value='const7'))
+            CONST8 = EnumField(ValueWithDescription(value=3, description='some const8 description'))
         ```
 
         3. An enumeration in which the values of all members are strings.
@@ -82,9 +82,9 @@ class ExtendedEnum(enum.Enum):
         from extended_enum import ExtendedEnum
 
         class StringEnum(ExtendedEnum):
-            CONST1 = 'const1'
-            CONST2 = 'const2'
-            CONST3 = 'const3'
+            CONST1 = EnumField('const1')
+            CONST2 = EnumField('const2')
+            CONST3 = EnumField('const3')
         ```
 
         4. An enumeration in which the values of all members are integers.
@@ -93,9 +93,9 @@ class ExtendedEnum(enum.Enum):
         from extended_enum import ExtendedEnum
 
         class IntegerEnum(ExtendedEnum):
-            CONST1 = 1
-            CONST2 = 2
-            CONST3 = 3
+            CONST1 = EnumField(1)
+            CONST2 = EnumField(2)
+            CONST3 = EnumField(3)
         ```
 
         5. An enumeration in which the values of all members are UUID.
@@ -105,9 +105,9 @@ class ExtendedEnum(enum.Enum):
         from extended_enum import ExtendedEnum
 
         class UUIDEnum(ExtendedEnum):
-            CONST1 = UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83')
-            CONST2 = UUID('e51107a4-7f2b-4de3-9034-fdfb0a50e30f')
-            CONST3 = UUID('a84fb294-edc8-46af-b6bc-103377dcee24')
+            CONST1 = EnumField(UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'))
+            CONST2 = EnumField(UUID('e51107a4-7f2b-4de3-9034-fdfb0a50e30f'))
+            CONST3 = EnumField(UUID('a84fb294-edc8-46af-b6bc-103377dcee24'))
         ```
     """
 
@@ -117,7 +117,7 @@ class ExtendedEnum(enum.Enum):
     _ignore_ = ['_simple_value2member']  # noqa: WPS120
     _simple_value2member: ClassVar[Dict[SimpleValueType, 'ExtendedEnumType']] = {}
 
-    def __init__(self, value: Union[SimpleValueType, ExtendedEnumValueType]) -> None:
+    def __init__(self, value: ExtendedEnumValueType) -> None:
         """
         Initialize an enumeration object.
 
@@ -126,11 +126,7 @@ class ExtendedEnum(enum.Enum):
                    The simple value will be converted to an expanded form to have the same interface.
         """
         self._check_type(value)
-        if not isinstance(value, BaseExtendedEnumValue):
-            value = BaseExtendedEnumValue(value)
-
         super().__init__()
-        self._value_ = value  # noqa: WPS120
 
     @classmethod
     def get_values(cls) -> Tuple[SimpleValueType, ...]:
@@ -167,18 +163,30 @@ class ExtendedEnum(enum.Enum):
 
     @classmethod
     def _check_type(cls, value: Any) -> None:
-        if isinstance(value, (UUID, int, str)):
-            return
         if isinstance(value, BaseExtendedEnumValue):
             return
         raise TypeError(f'{value!r} (type={type(value)}) is not a valid {cls.__qualname__}')  # noqa: WPS221
 
     @classmethod
     def _missing_(cls, value: Any) -> ExtendedEnumType:  # noqa: WPS120
-        cls._check_type(value)
         if isinstance(value, (UUID, int, str)):
             try:
                 return cls.get_simple_value_member()[value]
             except KeyError:
                 pass  # noqa: WPS420
         raise ValueError(f'{value!r} is not a valid {cls.__qualname__}')
+
+
+def EnumField(value: Union[SimpleValueType, ExtendedEnumValueType]) -> BaseExtendedEnumValue:  # noqa: N802
+    """
+    Prepare the value to be stored in the enumeration.
+
+    Args:
+        value: The value that will be prepared for storage in the enumeration.
+
+    Returns:
+        A normalized object containing an enumeration value.
+    """
+    if isinstance(value, (UUID, int, str)):
+        return BaseExtendedEnumValue(value=value)
+    return value

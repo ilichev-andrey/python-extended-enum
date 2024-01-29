@@ -3,90 +3,90 @@ from uuid import UUID
 
 import pytest
 
-from extended_enum import ExtendedEnum, BaseExtendedEnumValue, ExtendedEnumType, ValueWithDescription
+from extended_enum import ExtendedEnum, BaseExtendedEnumValue, ExtendedEnumType, ValueWithDescription, EnumField
 
 
 class StringEnum(ExtendedEnum):
     """An enumeration in which the values of all members are strings."""
 
-    CONST1 = 'const1'
-    DUPLICATE_CONST1 = 'const1'
+    CONST1 = EnumField('const1')
+    DUPLICATE_CONST1 = EnumField('const1')
 
 
 class IntegerEnum(ExtendedEnum):
     """An enumeration in which the values of all members are integers."""
 
-    CONST1 = 1
-    DUPLICATE_CONST1 = 1
+    CONST1 = EnumField(1)
+    DUPLICATE_CONST1 = EnumField(1)
 
 
 class UUIDEnum(ExtendedEnum):
     """An enumeration in which the values of all members are UUID."""
 
-    CONST1 = UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83')
-    DUPLICATE_CONST1 = UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83')
-    NOT_DUPLICATE_CONST1 = '79ff3431-3e98-4bec-9a4c-63ede2580f83'
+    CONST1 = EnumField(UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'))
+    DUPLICATE_CONST1 = EnumField(UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'))
+    NOT_DUPLICATE_CONST1 = EnumField('79ff3431-3e98-4bec-9a4c-63ede2580f83')
 
 
 class DetailedEnum1(ExtendedEnum):
     """An enumeration containing the values of all members of the extended type."""
 
-    CONST1 = BaseExtendedEnumValue(value='const1')
-    DUPLICATE_CONST1 = BaseExtendedEnumValue(value='const1')
+    CONST1 = EnumField(BaseExtendedEnumValue(value='const1'))
+    DUPLICATE_CONST1 = EnumField(BaseExtendedEnumValue(value='const1'))
 
-    CONST2 = BaseExtendedEnumValue(value=2)
-    DUPLICATE_CONST2 = BaseExtendedEnumValue(value=2)
+    CONST2 = EnumField(BaseExtendedEnumValue(value=2))
+    DUPLICATE_CONST2 = EnumField(BaseExtendedEnumValue(value=2))
 
-    CONST3 = BaseExtendedEnumValue(value=UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'))
-    DUPLICATE_CONST3 = BaseExtendedEnumValue(value=UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'))
+    CONST3 = EnumField(BaseExtendedEnumValue(value=UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83')))
+    DUPLICATE_CONST3 = EnumField(BaseExtendedEnumValue(value=UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83')))
 
 
 class DetailedEnum2(ExtendedEnum):
     """An enumeration containing the values of all members of the extended type."""
 
-    CONST1 = ValueWithDescription(value='const1', description='some description')
-    DUPLICATE_CONST1 = ValueWithDescription(value='const1')
-    DUPLICATE_CONST1_2 = ValueWithDescription(value='const1', description='some description')
-    NOT_DUPLICATE_CONST1 = ValueWithDescription(value='other_const', description='some description')
+    CONST1 = EnumField(ValueWithDescription(value='const1', description='some description'))
+    DUPLICATE_CONST1 = EnumField(ValueWithDescription(value='const1'))
+    DUPLICATE_CONST1_2 = EnumField(ValueWithDescription(value='const1', description='some description'))
+    NOT_DUPLICATE_CONST1 = EnumField(ValueWithDescription(value='other_const', description='some description'))
 
-    CONST2 = ValueWithDescription(value=2, description='some description')
-    DUPLICATE_CONST2 = ValueWithDescription(value=2)
-    DUPLICATE_CONST2_2 = ValueWithDescription(value=2, description='some description')
+    CONST2 = EnumField(ValueWithDescription(value=2, description='some description'))
+    DUPLICATE_CONST2 = EnumField(ValueWithDescription(value=2))
+    DUPLICATE_CONST2_2 = EnumField(ValueWithDescription(value=2, description='some description'))
 
-    CONST3 = ValueWithDescription(value=UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'), description='some description')
-    DUPLICATE_CONST3 = ValueWithDescription(value=UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'))
-    DUPLICATE_CONST3_2 = ValueWithDescription(
+    CONST3 = EnumField(ValueWithDescription(value=UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'), description='some description'))
+    DUPLICATE_CONST3 = EnumField(ValueWithDescription(value=UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83')))
+    DUPLICATE_CONST3_2 = EnumField(ValueWithDescription(
         value=UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'), description='some description'
-    )
+    ))
 
 
 class MixedEnum(ExtendedEnum):
     """A combined enumeration in which member values are of different types."""
 
-    CONST1 = 'const1'
-    DUPLICATE_CONST1 = 'const1'
+    CONST1 = EnumField('const1')
+    DUPLICATE_CONST1 = EnumField('const1')
 
-    CONST2 = 1
-    DUPLICATE_CONST2 = 1
-    NOT_DUPLICATE_CONST2 = '1'
+    CONST2 = EnumField(1)
+    DUPLICATE_CONST2 = EnumField(1)
+    NOT_DUPLICATE_CONST2 = EnumField('1')
 
-    CONST3 = UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83')
-    DUPLICATE_CONST3 = UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83')
-    NOT_DUPLICATE_CONST3 = '79ff3431-3e98-4bec-9a4c-63ede2580f83'
+    CONST3 = EnumField(UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'))
+    DUPLICATE_CONST3 = EnumField(UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'))
+    NOT_DUPLICATE_CONST3 = EnumField('79ff3431-3e98-4bec-9a4c-63ede2580f83')
 
-    CONST4 = BaseExtendedEnumValue(value='const4')
-    DUPLICATE_CONST4 = BaseExtendedEnumValue(value='const4')
+    CONST4 = EnumField(BaseExtendedEnumValue(value='const4'))
+    DUPLICATE_CONST4 = EnumField(BaseExtendedEnumValue(value='const4'))
 
-    CONST5 = BaseExtendedEnumValue(value=2)
-    DUPLICATE_CONST5 = BaseExtendedEnumValue(value=2)
-    NOT_DUPLICATE_CONST5 = BaseExtendedEnumValue(value='2')
+    CONST5 = EnumField(BaseExtendedEnumValue(value=2))
+    DUPLICATE_CONST5 = EnumField(BaseExtendedEnumValue(value=2))
+    NOT_DUPLICATE_CONST5 = EnumField(BaseExtendedEnumValue(value='2'))
 
-    CONST6 = BaseExtendedEnumValue(value=UUID('e7b4b8ae-2224-47ec-afce-40aeb10b85e2'))
-    DUPLICATE_CONST6 = BaseExtendedEnumValue(value=UUID('e7b4b8ae-2224-47ec-afce-40aeb10b85e2'))
+    CONST6 = EnumField(BaseExtendedEnumValue(value=UUID('e7b4b8ae-2224-47ec-afce-40aeb10b85e2')))
+    DUPLICATE_CONST6 = EnumField(BaseExtendedEnumValue(value=UUID('e7b4b8ae-2224-47ec-afce-40aeb10b85e2')))
 
-    DUPLICATE_CONST1_2 = BaseExtendedEnumValue(value='const1')
-    DUPLICATE_CONST2_2 = BaseExtendedEnumValue(value=1)
-    DUPLICATE_CONST3_2 = BaseExtendedEnumValue(value=UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'))
+    DUPLICATE_CONST1_2 = EnumField(BaseExtendedEnumValue(value='const1'))
+    DUPLICATE_CONST2_2 = EnumField(BaseExtendedEnumValue(value=1))
+    DUPLICATE_CONST3_2 = EnumField(BaseExtendedEnumValue(value=UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83')))
 
 
 @pytest.mark.parametrize(

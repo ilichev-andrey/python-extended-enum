@@ -5,31 +5,31 @@ from uuid import UUID
 import orjson
 import pytest
 
-from extended_enum import ExtendedEnum, BaseExtendedEnumValue, ValueWithDescription
+from extended_enum import ExtendedEnum, BaseExtendedEnumValue, ValueWithDescription, EnumField
 
 
 class MixedEnum(ExtendedEnum):
     """A combined enumeration in which member values are of different types."""
 
-    CONST1 = 'const1'
-    CONST2 = 1
-    CONST3 = UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83')
-    NOT_DUPLICATE_CONST3 = '79ff3431-3e98-4bec-9a4c-63ede2580f83'
-    CONST4 = BaseExtendedEnumValue(value='const4')
-    CONST5 = BaseExtendedEnumValue(value=2)
-    CONST6 = BaseExtendedEnumValue(value=UUID('e7b4b8ae-2224-47ec-afce-40aeb10b85e2'))
-    CONST7 = ValueWithDescription(value='const7')
-    CONST8 = ValueWithDescription(value=3, description='some const8 description')
+    CONST1 = EnumField('const1')
+    CONST2 = EnumField(1)
+    CONST3 = EnumField(UUID('79ff3431-3e98-4bec-9a4c-63ede2580f83'))
+    NOT_DUPLICATE_CONST3 = EnumField('79ff3431-3e98-4bec-9a4c-63ede2580f83')
+    CONST4 = EnumField(BaseExtendedEnumValue(value='const4'))
+    CONST5 = EnumField(BaseExtendedEnumValue(value=2))
+    CONST6 = EnumField(BaseExtendedEnumValue(value=UUID('e7b4b8ae-2224-47ec-afce-40aeb10b85e2')))
+    CONST7 = EnumField(ValueWithDescription(value='const7'))
+    CONST8 = EnumField(ValueWithDescription(value=3, description='some const8 description'))
 
 
 class DetailedEnum(ExtendedEnum):
     """An enumeration containing the values of all members of the extended type."""
 
-    CONST1 = BaseExtendedEnumValue(value='const1')
-    DUPLICATE_CONST1 = BaseExtendedEnumValue(value='const1')
-    DUPLICATE_CONST2 = ValueWithDescription(value='const1')
-    DUPLICATE_CONST3 = ValueWithDescription(value='const1', description='some description')
-    DUPLICATE_CONST4 = 'const1'
+    CONST1 = EnumField(BaseExtendedEnumValue(value='const1'))
+    DUPLICATE_CONST1 = EnumField(BaseExtendedEnumValue(value='const1'))
+    DUPLICATE_CONST2 = EnumField(ValueWithDescription(value='const1'))
+    DUPLICATE_CONST3 = EnumField(ValueWithDescription(value='const1', description='some description'))
+    DUPLICATE_CONST4 = EnumField('const1')
 
 
 @pytest.mark.parametrize(
@@ -83,7 +83,7 @@ def test_successful_loads(enum_cls: Type[ExtendedEnum], value: Any, expected_enu
         {
             'enum_cls': MixedEnum,
             'value': None,
-            'context': pytest.raises(TypeError, match=r"None \(type=<class 'NoneType'>\) is not a valid MixedEnum")
+            'context': pytest.raises(ValueError, match=r"None is not a valid MixedEnum")
         }.values(),
         {
             'enum_cls': MixedEnum,
