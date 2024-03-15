@@ -77,14 +77,18 @@ class MixedEnum(ExtendedEnum):
 ...     CONST3 = EnumField(ValueWithDescription(value='const3', description='some description 3'))
 >>> DetailedEnum.CONST2.value
 'const2'
+>>>
 >>> DetailedEnum.CONST2.extended_value
 ValueWithDescription(value='const2', description='some description 2')
+>>>
 >>> DetailedEnum.get_values()
 ('const1', 'const2', 'const3')
+>>>
 >>> DetailedEnum.get_extended_values()
 (ValueWithDescription(value='const1', description=None), 
  ValueWithDescription(value='const2', description='some description 2'), 
  ValueWithDescription(value='const3', description='some description 3'))
+>>>
 >>> DetailedEnum.get_members()
 mappingproxy({
     'CONST1': <DetailedEnum.CONST1: ValueWithDescription(value='const1', description=None)>, 
