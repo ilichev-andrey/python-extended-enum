@@ -132,12 +132,14 @@ ValueError: duplicate values found in <enum 'Mistake'>: THREE -> TWO, SIX -> FOU
 <img width="1433" alt="extended-enum_in_fastapi" src="https://github.com/ilichev-andrey/python-extended-enum/assets/24242890/f58640a8-7122-4f3c-8e93-f9ef96a65186">
 
 ```python
-from typing import Any, Literal, get_args, get_origin
+from typing import Literal
 
 import uvicorn
-from extended_enum import ExtendedEnum, EnumField, ValueWithDescription, BaseExtendedEnumValue
 from fastapi import FastAPI
 from pydantic import Field, BaseModel
+
+from extended_enum import ExtendedEnum, EnumField, ValueWithDescription
+from extended_enum.tools import format_to_markdown
 
 app = FastAPI()
 
@@ -158,27 +160,6 @@ class CompressedFileExtension(ExtendedEnum):
     ZIP = EnumField('.zip')
 
 
-def format_enum_description(enum_cls: Any, delimiter: str = '\n') -> str:
-    if get_origin(enum_cls) is not Literal and issubclass(enum_cls, ExtendedEnum):
-        extended_values = enum_cls.get_extended_values()
-    else:
-        extended_values = (
-            member.extended_value
-            for member in get_args(enum_cls)
-            if isinstance(member, ExtendedEnum)
-        )
-
-    items = (format_enum_value(enum_value=value) for value in extended_values)
-    return delimiter.join(items)
-
-
-def format_enum_value(enum_value: BaseExtendedEnumValue) -> str:
-    description = ''
-    if isinstance(enum_value, ValueWithDescription):
-        description = ' - {description}'.format(description=enum_value.description)
-    return '* `{value}`{description}'.format(value=enum_value.value, description=description)
-
-
 FileExtension2Type = Literal[CompressedFileExtension.IZMA, CompressedFileExtension.ZIP]
 
 
@@ -187,11 +168,11 @@ class SomeRequestBody(BaseModel):
     file_extension1: CompressedFileExtension = Field(
         default=CompressedFileExtension.ZIP,
         description='The following file extensions are supported.\n'
-                    '{0}'.format(format_enum_description(CompressedFileExtension))
+                    '{0}'.format(format_to_markdown(CompressedFileExtension))
     )
     file_extension2: FileExtension2Type = Field(
         description='The following file extensions are supported.\n'
-                    '{0}'.format(format_enum_description(FileExtension2Type))
+                    '{0}'.format(format_to_markdown(FileExtension2Type))
     )
 
 
