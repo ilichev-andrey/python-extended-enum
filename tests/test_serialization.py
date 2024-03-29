@@ -59,7 +59,7 @@ class DetailedEnum(ExtendedEnum):
 )
 def test_successful_loads(enum_cls: Type[ExtendedEnum], value: Any, expected_enum_member: ExtendedEnum):
     """
-    Check creation of enum constant from simple types.
+    Check creation of enum constant from different types.
     Expected:
         - Successful execution because constant exists.
     """
